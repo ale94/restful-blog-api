@@ -63,4 +63,25 @@ public class UserEntity implements Serializable {
     )
     List<CommentEntity> comments;
 
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        mappedBy = "user"
+    )
+    List<LikesEntity> likes;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        mappedBy = "user"
+    )
+    List<RatingEntity> rating;
+
 }

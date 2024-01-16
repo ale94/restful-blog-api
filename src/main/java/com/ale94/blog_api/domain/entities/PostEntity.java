@@ -52,4 +52,32 @@ public class PostEntity implements Serializable {
     )
     List<CommentEntity> comments;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        mappedBy = "post"
+    )
+    List<LikesEntity> likes;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(
+        fetch = FetchType.EAGER,
+        orphanRemoval = true,
+        cascade = CascadeType.ALL,
+        mappedBy = "post"
+    )
+    List<RatingEntity> rating;
+
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private CategoryEntity category;
+
+    @ManyToOne()
+    @JoinColumn(name = "tag_id")
+    private TagEntity tag;
+
 }
