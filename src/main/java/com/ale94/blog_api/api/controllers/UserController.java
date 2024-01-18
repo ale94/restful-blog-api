@@ -1,8 +1,11 @@
 package com.ale94.blog_api.api.controllers;
 
 import com.ale94.blog_api.api.models.requests.UserRequest;
+import com.ale94.blog_api.api.models.responses.LikesResponse;
+import com.ale94.blog_api.api.models.responses.PostResponse;
 import com.ale94.blog_api.api.models.responses.UserResponse;
 import com.ale94.blog_api.infraestructure.abstract_services.IUserService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -44,5 +48,21 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/posts/users/{id}")
+    public List<PostResponse> getPostsByUserId(@PathVariable Long id) {
+        return userService.findPostsByUserId(id);
+    }
+
+    @GetMapping("/posts/users")
+    public List<PostResponse> getPostsByUsername(@RequestParam String username) {
+        return userService.findPostsByUsername(username);
+    }
+
+    @GetMapping("/likes/users")
+    public List<LikesResponse> getLikesByUsername(@RequestParam String username) {
+        return userService.findLikesByUsername(username);
+    }
+
 
 }
