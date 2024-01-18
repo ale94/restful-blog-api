@@ -14,6 +14,7 @@ import com.ale94.blog_api.domain.repositories.PostRepository;
 import com.ale94.blog_api.domain.repositories.RatingRepository;
 import com.ale94.blog_api.domain.repositories.TagRepository;
 import com.ale94.blog_api.domain.repositories.UserRepository;
+import com.ale94.blog_api.infraestructure.abstract_services.IPostService;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class BlogApiApplication implements CommandLineRunner {
     private final RatingRepository ratingRepository;
     private final TagRepository tagRepository;
     private final CategoryRepository categoryRepository;
+    private final IPostService postService;
 
     public static void main(String[] args) {
         SpringApplication.run(BlogApiApplication.class, args);
@@ -107,5 +109,6 @@ public class BlogApiApplication implements CommandLineRunner {
         log.info(String.valueOf(userFromDB));
         log.info(String.valueOf(postFromDB));
         log.info(String.valueOf(commentFromDB));
+//        log.info(postService.findByUsername("ale94").toString());
     }
 }
