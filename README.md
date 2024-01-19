@@ -1,5 +1,7 @@
 # BlogAPI: Publica Rápidamente con esta API Minimalista
 
+## Introducción
+
 ¡Descubre BlogAPI! Este proyecto personal se creó con el objetivo específico de 
 aprender tecnologías del lado del back, centrándose en el uso de Spring Boot. Con un 
 enfoque minimalista, esta API REST te proporciona un espacio práctico y sencillo para 
@@ -7,15 +9,18 @@ explorar las funcionalidades básicas de un blog. Ideal para aquellos que desean
 en el desarrollo con Spring Boot y construir sus habilidades en el ámbito del backend. 
 ¡Bienvenido a BlogAPI, donde el aprendizaje y la construcción van de la mano!
 
-## Features
+## Configuración
+Para utilizar la API REST en tu entorno local, sigue estos pasos:
 
-- RESTful routing
-- Models with proper relationships
-- Controllers/Models etc with proper separation of concerns
-- JWT Authentication
-- RESTful errors
+1. Clona este repositorio: `https://github.com/ale94/Book-REST-API-CRUD.git`
+2. Crear base de datos H2 Console: `create database testdb`
+3. Cambie el nombre de usuario y la contraseña de H2 Console según su instalación:
+    - open src/main/resources/application.properties
+    - change spring.datasource.username and spring.datasource.password según su instalación de H2
+4. Compile y ejecute la aplicación usando maven: `mvn spring-boot:run`
+5. La aplicación comenzará a ejecutarse en http://localhost:8080.
 
-## Routes List:
+## Endpoints
 
 ### Comments
 
