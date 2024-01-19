@@ -15,9 +15,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -43,8 +41,6 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @ToString.Exclude // cuando este realizando los endpoint eliminar esto para ver si sigue el error
-    @EqualsAndHashCode.Exclude
     @OneToMany(
         fetch = FetchType.EAGER,
         orphanRemoval = true,
@@ -53,8 +49,6 @@ public class UserEntity implements Serializable {
     )
     List<PostEntity> posts;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(
         fetch = FetchType.EAGER,
         orphanRemoval = true,
@@ -62,26 +56,5 @@ public class UserEntity implements Serializable {
         mappedBy = "user"
     )
     List<CommentEntity> comments;
-
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(
-        fetch = FetchType.EAGER,
-        orphanRemoval = true,
-        cascade = CascadeType.ALL,
-        mappedBy = "user"
-    )
-    List<LikesEntity> likes;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(
-        fetch = FetchType.EAGER,
-        orphanRemoval = true,
-        cascade = CascadeType.ALL,
-        mappedBy = "user"
-    )
-    List<RatingEntity> rating;
 
 }

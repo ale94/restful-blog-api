@@ -16,9 +16,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
@@ -42,8 +40,6 @@ public class PostEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @OneToMany(
         fetch = FetchType.EAGER,
         orphanRemoval = true,
@@ -51,33 +47,5 @@ public class PostEntity implements Serializable {
         mappedBy = "post"
     )
     List<CommentEntity> comments;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(
-        fetch = FetchType.EAGER,
-        orphanRemoval = true,
-        cascade = CascadeType.ALL,
-        mappedBy = "post"
-    )
-    List<LikesEntity> likes;
-
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(
-        fetch = FetchType.EAGER,
-        orphanRemoval = true,
-        cascade = CascadeType.ALL,
-        mappedBy = "post"
-    )
-    List<RatingEntity> rating;
-
-    @ManyToOne()
-    @JoinColumn(name = "category_id")
-    private CategoryEntity category;
-
-    @ManyToOne()
-    @JoinColumn(name = "tag_id")
-    private TagEntity tag;
 
 }

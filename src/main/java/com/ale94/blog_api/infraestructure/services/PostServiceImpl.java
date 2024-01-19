@@ -1,5 +1,6 @@
 package com.ale94.blog_api.infraestructure.services;
 
+import com.ale94.blog_api.api.exceptions.ResourceNotFoundException;
 import com.ale94.blog_api.api.mappers.PostMapper;
 import com.ale94.blog_api.api.models.requests.PostRequest;
 import com.ale94.blog_api.api.models.responses.PostResponse;
@@ -26,7 +27,8 @@ public class PostServiceImpl implements IPostService {
     @Override
     public PostResponse create(PostRequest request) {
         var user = userRepository.findById(
-            Long.parseLong(request.getUser_id())).orElseThrow();
+                Long.parseLong(request.getUser_id()))
+            .orElseThrow(() -> new ResourceNotFoundException("users", "id", request.getUser_id()));
         var postToPersist = PostEntity.builder()
             .title(request.getTitle())
             .content(request.getContent())
@@ -43,13 +45,15 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public PostResponse read(Long id) {
-        var postFromDB = postRepository.findById(id).orElseThrow();
+        var postFromDB = postRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "id", id));
         return postMapper.entityToResponse(postFromDB);
     }
 
     @Override
     public PostResponse update(PostRequest request, Long id) {
-        var postToPersist = postRepository.findById(id).orElseThrow();
+        var postToPersist = postRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "id", id));
         postToPersist.setTitle(request.getTitle());
         postToPersist.setContent(request.getContent());
         postToPersist.setUpdatedAt(LocalDateTime.now());
@@ -60,7 +64,8 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public void delete(Long id) {
-        var postToDelete = postRepository.findById(id).orElseThrow();
+        var postToDelete = postRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "id", id));
         postRepository.delete(postToDelete);
     }
 

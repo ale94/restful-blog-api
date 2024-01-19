@@ -1,10 +1,11 @@
 package com.ale94.blog_api.infraestructure.services;
 
-import com.ale94.blog_api.api.mappers.LikesMapper;
+import com.ale94.blog_api.api.exceptions.ResourceNotFoundException;
+import com.ale94.blog_api.api.mappers.CommentMapper;
 import com.ale94.blog_api.api.mappers.PostMapper;
 import com.ale94.blog_api.api.mappers.UserMapper;
 import com.ale94.blog_api.api.models.requests.UserRequest;
-import com.ale94.blog_api.api.models.responses.LikesResponse;
+import com.ale94.blog_api.api.models.responses.CommentResponse;
 import com.ale94.blog_api.api.models.responses.PostResponse;
 import com.ale94.blog_api.api.models.responses.UserResponse;
 import com.ale94.blog_api.domain.entities.UserEntity;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PostMapper postMapper;
-    private final LikesMapper likesMapper;
+    private final CommentMapper commentMapper;
 
     @Override
     public UserResponse create(UserRequest request) {
@@ -49,13 +50,15 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserResponse read(Long id) {
-        var userFromDB = userRepository.findById(id).orElseThrow();
+        var userFromDB = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("users", "id", id));
         return userMapper.entityToResponse(userFromDB);
     }
 
     @Override
     public UserResponse update(UserRequest request, Long id) {
-        var userToUpdate = userRepository.findById(id).orElseThrow();
+        var userToUpdate = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("users", "id", id));
         userToUpdate.setFirstName(request.getFirstName());
         userToUpdate.setLastName(request.getLastName());
         userToUpdate.setEmail(request.getEmail());
@@ -68,13 +71,15 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void delete(Long id) {
-        var userToDelete = userRepository.findById(id).orElseThrow();
+        var userToDelete = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("users", "id", id));
         userRepository.delete(userToDelete);
     }
 
     @Override
     public List<PostResponse> findPostsByUserId(Long id) {
-        var user = userRepository.findById(id).orElseThrow();
+        var user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "id", id));
         return user.getPosts().stream()
             .map(postMapper::entityToResponse)
             .collect(Collectors.toList());
@@ -82,19 +87,29 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<PostResponse> findPostsByUsername(String username) {
-        var user = userRepository.findByUsername(username).orElseThrow();
+        var user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "username", username));
         return user.getPosts().stream()
             .map(postMapper::entityToResponse)
             .collect(Collectors.toList());
     }
 
     @Override
-    public List<LikesResponse> findLikesByUsername(String username) {
-        var user = userRepository.findByUsername(username).orElseThrow();
-        return user.getLikes().stream()
-            .map(likesMapper::entityToResponse)
+    public List<CommentResponse> findCommentsByUserId(Long id) {
+        var user = userRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("comments", "id", id));
+        return user.getComments().stream()
+            .map(commentMapper::entityToResponse)
             .collect(Collectors.toList());
     }
 
+    @Override
+    public List<CommentResponse> findCommentsByUsername(String username) {
+        var user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResourceNotFoundException("comments", "username", username));
+        return user.getComments().stream()
+            .map(commentMapper::entityToResponse)
+            .collect(Collectors.toList());
+    }
 
 }

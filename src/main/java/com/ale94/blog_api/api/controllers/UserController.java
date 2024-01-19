@@ -1,7 +1,7 @@
 package com.ale94.blog_api.api.controllers;
 
 import com.ale94.blog_api.api.models.requests.UserRequest;
-import com.ale94.blog_api.api.models.responses.LikesResponse;
+import com.ale94.blog_api.api.models.responses.CommentResponse;
 import com.ale94.blog_api.api.models.responses.PostResponse;
 import com.ale94.blog_api.api.models.responses.UserResponse;
 import com.ale94.blog_api.infraestructure.abstract_services.IUserService;
@@ -59,10 +59,14 @@ public class UserController {
         return userService.findPostsByUsername(username);
     }
 
-    @GetMapping("/likes/users")
-    public List<LikesResponse> getLikesByUsername(@RequestParam String username) {
-        return userService.findLikesByUsername(username);
+    @GetMapping("/comment/users/{id}")
+    public List<CommentResponse> getCommentsByUserId(@PathVariable Long id) {
+        return userService.findCommentsByUserId(id);
     }
 
+    @GetMapping("/comment/users")
+    public List<CommentResponse> getCommentsByUsername(@RequestParam String username) {
+        return userService.findCommentsByUsername(username);
+    }
 
 }

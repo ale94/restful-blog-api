@@ -1,5 +1,6 @@
 package com.ale94.blog_api.infraestructure.services;
 
+import com.ale94.blog_api.api.exceptions.ResourceNotFoundException;
 import com.ale94.blog_api.api.mappers.CommentMapper;
 import com.ale94.blog_api.api.models.requests.CommentRequest;
 import com.ale94.blog_api.api.models.responses.CommentResponse;
@@ -27,10 +28,12 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public CommentResponse create(CommentRequest request) {
-        var user = userRepository.findById(
-            Long.parseLong(request.getUser_id())).orElseThrow();
-        var post = postRepository.findById(
-            Long.parseLong(request.getPost_id())).orElseThrow();
+        var user = userRepository
+            .findById(Long.parseLong(request.getUser_id()))
+            .orElseThrow(() -> new ResourceNotFoundException("users", "id", request.getUser_id()));
+        var post = postRepository
+            .findById(Long.parseLong(request.getPost_id()))
+            .orElseThrow(() -> new ResourceNotFoundException("posts", "id", request.getPost_id()));
         var commentToPersist = CommentEntity.builder()
             .content(request.getContent())
             .publishedAt(LocalDateTime.now())
@@ -44,13 +47,15 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public CommentResponse read(Long id) {
-        var commentFromDB = commentRepository.findById(id).orElseThrow();
+        var commentFromDB = commentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("comments", "id", id));
         return commentMapper.entityToResponse(commentFromDB);
     }
 
     @Override
     public CommentResponse update(CommentRequest request, Long id) {
-        var commentToPersist = commentRepository.findById(id).orElseThrow();
+        var commentToPersist = commentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("comments", "id", id));
         commentToPersist.setContent(request.getContent());
         var commentToPersisted = commentRepository.save(commentToPersist);
         log.info("Comment updated with id: {}", commentToPersisted.getId());
@@ -59,7 +64,8 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     public void delete(Long id) {
-        var commentToDelete = commentRepository.findById(id).orElseThrow();
+        var commentToDelete = commentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("comments", "id", id));
         commentRepository.delete(commentToDelete);
     }
 }
