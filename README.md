@@ -1,4 +1,4 @@
-# BlogAPI: Publica Rápidamente con esta API Minimalista
+# BlogAPI Publica Rápidamente con esta API Minimalista
 
 ## Introducción
 
